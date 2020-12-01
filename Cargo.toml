@@ -1,0 +1,12 @@
+[package]
+name = "hans"
+version = "0.1.0"
+authors = ["Matthias Budde <matt@nordseele.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+rosc = "0.4.2"
+rppal = "0.11.3"
+midir = "0.7.0"
