@@ -1,19 +1,16 @@
 pub mod er301;
 pub mod txo;
 
-#[non_exhaustive]
-pub struct Cmd;
-
 #[derive(Debug)]
 pub struct Command {
    pub command_number: u8,
-   pub args: Vec<Arg>
+   pub args: &'static[Arg],
 }
 
 #[derive(Debug)]
 pub struct Arg {
-    name: String,
-    argtype: Bufsize
+    pub name: &'static str,
+    pub argtype: Bufsize,
 }
 #[derive(Debug)]
 pub enum Bufsize {

@@ -24,6 +24,9 @@ use crate::midi::*;
 //    github.com/nordseele
 */
 
+
+/* WIP DO NOT USE !!!!! */
+
 fn main()  {
     greetings();
 
@@ -35,6 +38,14 @@ fn main()  {
     // MIDI
     let midi_in = midi::create_midi_in().unwrap();
     let midi_out = midi::create_midi_out();
+
+    // I2C
+   // println!("TR command number -> {}", er301::ER301.tr.command_number);
+    println!("ER 301 command number -> {}", er301::CV_OFFSET.command_number);
+    println!("TXo command number -> {}", txo::CV_OFFSET.command_number);
+    println!("TXo command number -> {}", txo::CV_OFFSET.args[0].name);
+    println!("TXo command number -> {}", txo::CV_OFFSET.args[0].name);
+    println!("TXo command number -> {}", txo::CV_OFFSET.command_number);
     
     // OSC
     let mut buf = [0u8; rosc::decoder::MTU];
@@ -43,7 +54,7 @@ fn main()  {
             Ok((size, addr)) => {
                 println!("Received packet with size {} from: {}", size, addr);
                 let packet = rosc::decoder::decode(&buf[..size]).unwrap();
-                osc::handle_packet(packet);
+                //osc::handle_packet(packet);
             }
             Err(e) => {
                 println!("Error receiving from socket: {}", e);
@@ -52,46 +63,6 @@ fn main()  {
         }
     }
 }
-
-
-/*
-fn get_command(module: &str, command: &str) -> Option <Command> { // we hardcode commands that way until we find another solution
-    match module {
-        "Er301" | "er301" => 
-            match command {
-                "tr" | "TR" | "trigger" => Some(Command{command_name: String::from("tr"), command_number: 0x0}),
-                "tr_tog" => Some(Command{command_name: String::from("tr_toggle"), command_number: 0x0}),
-                //
-                _ => None,
-            },
-    _ => None,
-    }
-}
-*/
-/*
-#[allow(dead_code)]
-
-*/
-
-
-/*let cmd = get_command(path[0], path[2]);
-    match cmd {
-        Some(command) => println!("{:?}", command),
-        None => println!("Not found"),
-    }*/
-        //println!("{}", dev);
-
-        //let f = Follower {
-        //    device: device,
-        //    unit: path[1].to_string(),
-        //    command: path[2].to_string(),
-        //    args: args
-        // };
-
-          //  match send_i2c(f) {
-          //      Ok(()) => (), 
-          //      Err(_) => println!("I2c configuration error"),
-          //  }
 
     
 fn greetings() {

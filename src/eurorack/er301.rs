@@ -1,7 +1,25 @@
 pub use super::Command;
 pub use super::Arg;
 pub use super::Bufsize;
-pub use super::Cmd;
+pub use super::er301;
+/*
+pub const ER301: Module = Module {
+    tr       : Command {number_of_args:1, command_number: 0x0,  args: [ Arg { argtype: Bufsize::U8 }; 1]},
+    tr_tog   : Command {number_of_args:1, command_number: 0x01, args: [ Arg { argtype: Bufsize::U8 }; 1]},
+    tr_pulse : Command {number_of_args:1, command_number: 0x5,  args: [ Arg { argtype: Bufsize::U8 }; 1]},
+    tr_time  : Command {number_of_args:2, command_number: 0x32, args: [ Arg { argtype: Bufsize::U8 }, Arg { argtype: Bufsize::S16}; 2] },
+    tr_pol   : Command {number_of_args:2, command_number: 0x6,  args: [ Arg { argtype: Bufsize::U8 }, Arg { argtype: Bufsize::S16}; 2] },
+    cv       : Command {number_of_args:2, command_number: 0x10, args: [ Arg { argtype: Bufsize::U8 }, Arg { argtype: Bufsize::S16V};2] },
+    cv_slew  : Command {number_of_args:2, command_number: 0x12, args: [ Arg { argtype: Bufsize::U8 }, Arg { argtype: Bufsize::S16V};2] },
+    cv_set   : Command {number_of_args:2, command_number: 0x11, args: [ Arg { argtype: Bufsize::U8 }, Arg { argtype: Bufsize::S16V};2] },
+    cv_offset: Command {number_of_args:2, command_number: 0x15, args: [ Arg { argtype: Bufsize::U8 }, Arg { argtype: Bufsize::S16V};2] },
+};
+*/
+
+pub const CV_OFFSET: Command = Command {command_number: 0x15, args: &[ Arg{ name: "port", argtype: Bufsize::U8}, Arg{ name: "offset", argtype: Bufsize::S16V}]};
+
+// Use static slice for array
+
 
 pub fn address(unit: usize) -> u8 {
     let max_devices = 3;
@@ -14,38 +32,23 @@ pub fn address(unit: usize) -> u8 {
         unit_addr
     }
 }
-
-pub fn get_cmd_from_string(cmd_name: &str) -> Option<Command>{
+/*
+pub fn cmd_from_string(cmd_name: &str) -> Option<Command>{
     match cmd_name {
-        "tr" | "trigger"            => get_cmd(Args::Tr),
-        "tr_tog"                    => get_cmd(Args::TrTog),
-        "tr_pulse" | "trp" | "tr_p" => get_cmd(Args::TrPulse),
-        "tr_time"                   => get_cmd(Args::TrTime),
-        "tr_pol"                    => get_cmd(Args::TrPol),
-        "cv"                        => get_cmd(Args::Cv),
-        "cv_slew"                   => get_cmd(Args::CvSlew),
-        "cv_set"                    => get_cmd(Args::CvSet),
-        "cv_off"                    => get_cmd(Args::CvOff),
+        "tr" | "trigger"            => Some(ER301.tr),
+        "tr_tog"                    => Some(ER301.tr),
+        "tr_pulse" | "trp" | "tr_p" => Some(ER301.tr),
+        "tr_time"                   => Some(ER301.tr),
+        "tr_pol"                    => Some(ER301.tr),
+        "cv"                        => Some(ER301.tr),
+        "cv_slew"                   => Some(ER301.tr),
+        "cv_set"                    => Some(ER301.tr),
+        "cv_off"                    => Some(ER301.tr),
         _                           => None,
     }
 }
-
-pub fn get_cmd(cmd: Args) -> Option<Command>{
-    match cmd {
-        Args::Tr      => Some(Command{command_number: 0x0,  args: vec![Arg{name: String::from("port"), argtype: Bufsize::U8}]}),
-        Args::TrTog   => Some(Command{command_number: 0x01, args: vec![Arg{name: String::from("port"), argtype: Bufsize::U8}]}),
-        Args::TrPulse => Some(Command{command_number: 0x5,  args: vec![Arg{name: String::from("port"), argtype: Bufsize::U8}]}),
-        Args::TrTime  => Some(Command{command_number: 0x32, args: vec![Arg{name: String::from("port"), argtype: Bufsize::U8}, Arg{name: String::from("ms"), argtype: Bufsize::S16}]}),
-        Args::TrPol   => Some(Command{command_number: 0x6,  args: vec![Arg{name: String::from("port"), argtype: Bufsize::U8}, Arg{name: String::from("rising"), argtype: Bufsize::S16}]}),
-        Args::Cv      => Some(Command{command_number: 0x10, args: vec![Arg{name: String::from("port"), argtype: Bufsize::U8}, Arg{name: String::from("volts"), argtype: Bufsize::S16V}]}),
-        Args::CvSlew  => Some(Command{command_number: 0x12, args: vec![Arg{name: String::from("port"), argtype: Bufsize::U8}, Arg{name: String::from("ms"), argtype: Bufsize::S16V}]}),
-        Args::CvSet   => Some(Command{command_number: 0x11, args: vec![Arg{name: String::from("port"), argtype: Bufsize::U8}, Arg{name: String::from("volts"), argtype: Bufsize::S16V}]}),
-        Args::CvOff   => Some(Command{command_number: 0x15, args: vec![Arg{name: String::from("port"), argtype: Bufsize::U8}, Arg{name: String::from("volts"), argtype: Bufsize::S16V}]}),
-        _             => None, 
-    }
-}
-
-pub enum Args {
+*/
+pub enum Cmd {
      Tr, 
      TrTog,
      TrPulse,
@@ -56,3 +59,16 @@ pub enum Args {
      CvSet,
      CvOff,
 }
+
+pub struct Module {
+    pub tr       : Command,
+    pub tr_tog   : Command,
+    pub tr_pulse : Command,
+    pub tr_time  : Command,
+    pub tr_pol   : Command,
+    pub cv       : Command,
+    pub cv_slew  : Command,
+    pub cv_set   : Command,
+    pub cv_offset: Command,
+}
+

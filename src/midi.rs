@@ -16,6 +16,12 @@ pub fn create_midi_in() -> Result<midir::MidiInputConnection<()>, Box<dyn Error>
     )
 }
 
+/*
+HANDLE PROGRAM CHANGE :-/// !!!
+
+*/
+
+
 pub fn create_midi_out() -> Result<midir::MidiOutputConnection, Box<dyn Error>>  {
     let midi_out = MidiOutput::new("Hans Output")?;
     println!("Opening virtual Midi out");
@@ -27,21 +33,20 @@ pub fn create_midi_out() -> Result<midir::MidiOutputConnection, Box<dyn Error>> 
 fn handle_midi_message(bytes: &[u8]) {
     let channel = (bytes[0] % 16) + 1;
     match bytes[0] {
-        144..=159 => noteOn{channel: channel, number: bytes[1], velocity: bytes[2]}.handle(),
+        144..=159 => NoteOn{channel: channel, number: bytes[1], velocity: bytes[2]}.to_i2c(),
         128..=143 => println!("Type: note off | Channel: {} | Number: {} | Release: {}", channel, bytes[1], bytes[2]),
         176..=192 => println!("Type: control | Channel: {} | Number: {} | Value: {}", channel, bytes[1], bytes[2]),
         _ => println!("?")
     }
-
 }
 
-struct noteOn {
+struct NoteOn {
     channel: u8, 
     number: u8,
     velocity: u8,
 }
 
-struct noteOff {
+struct NoteOff {
     channel: u8, 
     number: u8,
     velocity: u8,
@@ -53,8 +58,14 @@ struct CC {
     value: u8,
 }
 
-impl noteOn {
-    fn handle(self) {
+impl NoteOn {
+    fn display(self) {
         println!("{} {} {}", self.channel, self.number, self.velocity)
+    }
+    fn to_i2c(self) {
+        match self.number {
+            40..=80 => println!("{:?}, {}", 1, 2),
+            _ => println!("no mapping"),
+        }
     }
 }

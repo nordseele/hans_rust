@@ -3,16 +3,14 @@
 use rosc::OscPacket;
 use rosc::OscType;
 use crate::eurorack::*;
-
+/*
 pub fn handle_packet(packet: OscPacket) {
     let mut args = Vec::new();
     let mut cmd_args: Option<Command> = None;
     
     match packet {
         OscPacket::Message(msg) => {
-            
             let path: Vec< &str > = (msg.addr).trim_matches('/').split_terminator("/").collect();
-            
             // Parse the port number and move it to the list of args if the structure of the path is OK
             if path.len() == 4 {
                 match path[3].parse() {
@@ -30,15 +28,15 @@ pub fn handle_packet(packet: OscPacket) {
 
             match path[0] {
                 "er301" | "Er301" =>
-                    match er301::get_cmd_from_string(path[2]) { 
+                    match er301::cmd_from_string(path[2]) { 
                         Some(value) => cmd_args = Some(value), 
                         None => OscErrors::UnrecognizedAddress.print_error(),
                     },
-                "txo" | "Txo" =>
+                /*"txo" | "Txo" =>
                     match txo::get_cmd_from_string(path[2]) {
                         Some(value) => cmd_args = Some(value),
                         None => OscErrors::UnrecognizedAddress.print_error(),
-                    }, 
+                    }, */
                 _ => OscErrors::DeviceNotFound.print_error(),
             }
         },
@@ -71,3 +69,4 @@ impl OscErrors {
         }
     }
 }
+*/
