@@ -8,7 +8,6 @@ use rosc::OscPacket;
 use rosc::OscType;
 use std::net::{UdpSocket, SocketAddrV4, Ipv4Addr};
 use std::fmt;
-use rppal::i2c::I2c;
 mod midi;
 mod osc; 
 mod eurorack;
@@ -40,12 +39,7 @@ fn main()  {
     let midi_out = midi::create_midi_out();
 
     // I2C
-   // println!("TR command number -> {}", er301::ER301.tr.command_number);
-    println!("ER 301 command number -> {}", er301::CV_OFFSET.command_number);
-    println!("TXo command number -> {}", txo::CV_OFFSET.command_number);
-    println!("TXo command number -> {}", txo::CV_OFFSET.args[0].name);
-    println!("TXo command number -> {}", txo::CV_OFFSET.args[0].name);
-    println!("TXo command number -> {}", txo::CV_OFFSET.command_number);
+    
     
     // OSC
     let mut buf = [0u8; rosc::decoder::MTU];
@@ -54,7 +48,7 @@ fn main()  {
             Ok((size, addr)) => {
                 println!("Received packet with size {} from: {}", size, addr);
                 let packet = rosc::decoder::decode(&buf[..size]).unwrap();
-                //osc::handle_packet(packet);
+                osc::handle_packet(packet);
             }
             Err(e) => {
                 println!("Error receiving from socket: {}", e);

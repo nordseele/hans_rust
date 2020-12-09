@@ -2,26 +2,18 @@ pub use super::Command;
 pub use super::Arg;
 pub use super::Bufsize;
 pub use super::er301;
-/*
-pub const ER301: Module = Module {
-    tr       : Command {number_of_args:1, command_number: 0x0,  args: [ Arg { argtype: Bufsize::U8 }; 1]},
-    tr_tog   : Command {number_of_args:1, command_number: 0x01, args: [ Arg { argtype: Bufsize::U8 }; 1]},
-    tr_pulse : Command {number_of_args:1, command_number: 0x5,  args: [ Arg { argtype: Bufsize::U8 }; 1]},
-    tr_time  : Command {number_of_args:2, command_number: 0x32, args: [ Arg { argtype: Bufsize::U8 }, Arg { argtype: Bufsize::S16}; 2] },
-    tr_pol   : Command {number_of_args:2, command_number: 0x6,  args: [ Arg { argtype: Bufsize::U8 }, Arg { argtype: Bufsize::S16}; 2] },
-    cv       : Command {number_of_args:2, command_number: 0x10, args: [ Arg { argtype: Bufsize::U8 }, Arg { argtype: Bufsize::S16V};2] },
-    cv_slew  : Command {number_of_args:2, command_number: 0x12, args: [ Arg { argtype: Bufsize::U8 }, Arg { argtype: Bufsize::S16V};2] },
-    cv_set   : Command {number_of_args:2, command_number: 0x11, args: [ Arg { argtype: Bufsize::U8 }, Arg { argtype: Bufsize::S16V};2] },
-    cv_offset: Command {number_of_args:2, command_number: 0x15, args: [ Arg { argtype: Bufsize::U8 }, Arg { argtype: Bufsize::S16V};2] },
-};
-*/
 
+pub const TR: Command = Command {command_number: 0x0, args: &[ Arg{ name: "port", argtype: Bufsize::U8}]};
+pub const TR_TOG: Command = Command {command_number: 0x01, args: &[ Arg{ name: "port", argtype: Bufsize::U8}]};
+pub const TR_PULSE: Command = Command {command_number: 0x5, args: &[ Arg{ name: "port", argtype: Bufsize::U8}]};
+pub const TR_TIME: Command = Command {command_number: 0x32, args: &[ Arg{ name: "port", argtype: Bufsize::U8}, Arg{ name: "time", argtype: Bufsize::S16}]};
+pub const TR_POL: Command = Command {command_number: 0x6, args: &[ Arg{ name: "port", argtype: Bufsize::U8}, Arg{ name: "polarity", argtype: Bufsize::S16}]};
+pub const CV: Command = Command {command_number: 0x10, args: &[ Arg{ name: "port", argtype: Bufsize::U8}, Arg{ name: "volt", argtype: Bufsize::S16V}]};
+pub const CV_SLEW: Command = Command {command_number: 0x12, args: &[ Arg{ name: "port", argtype: Bufsize::U8}, Arg{ name: "time", argtype: Bufsize::S16V}]};
+pub const CV_SET: Command = Command {command_number: 0x11, args: &[ Arg{ name: "port", argtype: Bufsize::U8}, Arg{ name: "volt", argtype: Bufsize::S16V}]};
 pub const CV_OFFSET: Command = Command {command_number: 0x15, args: &[ Arg{ name: "port", argtype: Bufsize::U8}, Arg{ name: "offset", argtype: Bufsize::S16V}]};
 
-// Use static slice for array
-
-
-pub fn address(unit: usize) -> u8 {
+pub fn address(unit: usize) -> usize {
     let max_devices = 3;
     let addr = [0x31, 0x32, 0x33];
     if unit < max_devices {
@@ -32,22 +24,22 @@ pub fn address(unit: usize) -> u8 {
         unit_addr
     }
 }
-/*
+
 pub fn cmd_from_string(cmd_name: &str) -> Option<Command>{
     match cmd_name {
-        "tr" | "trigger"            => Some(ER301.tr),
-        "tr_tog"                    => Some(ER301.tr),
-        "tr_pulse" | "trp" | "tr_p" => Some(ER301.tr),
-        "tr_time"                   => Some(ER301.tr),
-        "tr_pol"                    => Some(ER301.tr),
-        "cv"                        => Some(ER301.tr),
-        "cv_slew"                   => Some(ER301.tr),
-        "cv_set"                    => Some(ER301.tr),
-        "cv_off"                    => Some(ER301.tr),
+        "tr" | "trigger"            => Some(TR),
+        "tr_tog"                    => Some(TR_TOG),
+        "tr_pulse" | "trp" | "tr_p" => Some(TR_PULSE),
+        "tr_time"                   => Some(TR_TIME),
+        "tr_pol"                    => Some(TR_POL),
+        "cv"                        => Some(CV),
+        "cv_slew"                   => Some(CV_SLEW),
+        "cv_set"                    => Some(CV_SET),
+        "cv_off"                    => Some(CV_OFFSET),
         _                           => None,
     }
 }
-*/
+
 pub enum Cmd {
      Tr, 
      TrTog,
