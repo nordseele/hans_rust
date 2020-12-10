@@ -6,6 +6,7 @@ pub mod ii;
 pub struct Command {
    pub command_number: u8,
    pub args: &'static[Arg],
+   pub required: usize,
 }
 
 #[derive(Debug)]
@@ -13,6 +14,7 @@ pub struct Arg {
     pub name: &'static str,
     pub argtype: Bufsize,
 }
+
 #[derive(Debug)]
 pub enum Bufsize {
     U8, 
@@ -20,7 +22,7 @@ pub enum Bufsize {
     S16V,
 }
 #[derive(Debug)]
-pub enum Euro_modules {
+pub enum EuroModules {
     Er301,
     Txo,
 }
