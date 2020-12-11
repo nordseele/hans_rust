@@ -4,22 +4,22 @@
 
 use rosc::OscPacket;
 use rosc::OscType;
-use crate::eurorack::{ii, Command, EuroModules};
+use crate::eurorack::*;
 
 pub fn handle_packet(packet: OscPacket) {
-    // Split the address and route the components
+    // split the address and route the components
     match packet {
         OscPacket::Message(msg) => {
             let path: Vec< &str > = (msg.addr).trim_matches('/').split_terminator("/").collect();
             match path[0] {
-                // Route to Eurorack modules
+                // route to Eurorack modules
                 "er301" | "Er301" | "Txo" | "txo" => route_eurorack_module(&msg, path),
-                // Route to the set of custom actions defined in submodules
+                // route to the set of custom actions defined in submodules
                 "hans" | "Hans" => route_custom_action(&msg, path),
                 _ => OscErrors::NoSetAction.print_error()
             }
         },
-        _ => (),// we don't care for OSC bundles yet
+        _ => (),
     }    
 }
 
@@ -28,29 +28,31 @@ fn route_eurorack_module(msg: &rosc::OscMessage, path: Vec< &str >) {
     let mut data: Vec<u16> = Vec::new();
     let m = msg.args.to_vec();
     let _cmd_args: Option<Command> = None;
-    // Push the additional arguments/values to the vector
+    // push the additional arguments/values to the vector
     for i in m {
         match i {
             OscType::Int(value) => data.push(value as u16),
             _ => ()
         }
     }
-    // Retrieve the module number  
+    // retrieve the module number  
     let module_number = get_module_number(&path[1]);
-    // Retrieve the port number  
+    // retrieve the port number  
     let port_number = get_port_number(&path);
 
-    // Assign an enum variant to the module name, check if the module exists
+    // assign an enum variant to the module name, check if the module exists
     let module_name =
         match path[0] {
             "er301" | "Er301" => Some(EuroModules::Er301),
-            "txo" | "Txo" => Some(EuroModules::Txo),
-            _ => None,
+            "txo" | "Txo"     => Some(EuroModules::Txo),
+            _                 => None,
         };
-    // Extract a command, we'll test it later in the corresponding Module
-    let command = &path[2];
-    // Check if we have all the data needed and pass to the II Module
+    // extract a command, we'll test it later in the corresponding Module ====== >  ???
+    //let command = &path[2];
+    
+    // check if we have all the data needed and pass to the II Module
     if let (Some(module_name), Some(module_number), Some(port_number)) = (module_name, module_number, port_number) {
+        let command = get_module_command(&module_name, &path[2]);
         match ii::send_i2c(module_name, module_number, port_number, command, data) {
             Ok(_) => {},
             Err(_) => println!("Are you sure the Eurorack module is connected ?"),
@@ -71,6 +73,16 @@ fn get_module_number(module: &str) -> Option<usize> {
         Err(_) => None,
 
     }
+}
+
+fn get_module_command(module_name: &EuroModules, command: &str) -> Option<Command>{
+    let mut cmd: Option<Command> = None;
+    // route command lookup to the corresponding module
+        match module_name {
+            EuroModules::Er301 => cmd = er301::cmd_from_string(command),
+            _ => cmd = None,
+        }
+    cmd
 }
 
 fn get_port_number(path: &Vec<&str>) -> Option<u8> {

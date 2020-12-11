@@ -1,8 +1,8 @@
-// Instructions
+// instructions
 #![allow(dead_code)]
 #![allow(unused_imports)]
 
-// Modules
+// modules
 use std::error::Error;
 use rosc::OscPacket;
 use rosc::OscType;
@@ -17,31 +17,28 @@ use crate::eurorack::*;
 use crate::midi::*;
 
 /*                 
-//    Hans - OSC and MIDI to i2C ///////
-//    Ble MIDI to i2C ///////
-//    I2C to MIDI - Nordseele ® 2020 ///
-//    github.com/nordseele
+  Hans - OSC and MIDI to i2C ///////
+  Ble MIDI to i2C ///////
+  I2C to MIDI - Nordseele ® 2020 ///
+  github.com/nordseele
 */
 
-
-/* WIP DO NOT USE !!!!! */
-
 fn main()  {
+
     greetings();
 
-    // UDP
+    // udp
     let addr = SocketAddrV4::new(Ipv4Addr::new(0, 0, 0, 0), settings::UDP_PORT);
     let socket = UdpSocket::bind(addr).expect("couldn't bind to address");
     println!("Listening on port {} / full addr: {}", addr.port(), addr);
 
-    // MIDI
+    // midi : midi.rs 
     let midi_in = midi::create_midi_in().unwrap();
     let midi_out = midi::create_midi_out();
 
-    // I2C
+    // i2c : ii.rs 
     
-    
-    // OSC
+    // osc : osc.rs 
     let mut buf = [0u8; rosc::decoder::MTU];
     loop {
         match socket.recv_from(&mut buf) {
@@ -57,7 +54,6 @@ fn main()  {
         }
     }
 }
-
     
 fn greetings() {
     println!("Hans | Nordseele 2020");

@@ -4,7 +4,7 @@ use midir::os::unix::{VirtualInput, VirtualOutput};
 use crate::patch::*;
 use crate::eurorack::*;
 
-// Create Virtual MIDI IO (variables stored and kept alive in main.rs)
+// create Virtual MIDI IO (variables stored and kept alive in main.rs)
 pub fn create_midi_in() -> Result<midir::MidiInputConnection<()>, Box<dyn Error>>  {
     let mut midi_in = MidiInput::new("Hans Input")?;
     midi_in.ignore(Ignore::SysexAndTime);
@@ -25,9 +25,9 @@ pub fn create_midi_out() -> Result<midir::MidiOutputConnection, Box<dyn Error>> 
 }
 
 fn handle_midi_message(bytes: &[u8]) {
-    // Retrieve MIDI channel
+    // retrieve MIDI channel
     let channel = (bytes[0] % 16) + 1;
-    // Route various message types
+    // route various message types
     match bytes[0] {
         144..=159 => NoteOn{channel: channel, number: bytes[1], velocity: bytes[2]}.to_i2c(),
         128..=143 => println!("Type: note off | Channel: {} | Number: {} | Release: {}", channel, bytes[1], bytes[2]),
@@ -58,7 +58,6 @@ struct CC {
     number: u8,
     value: u8,
 }
-
 
 impl NoteOn {
     fn display(self) {
