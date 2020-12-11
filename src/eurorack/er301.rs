@@ -3,7 +3,12 @@ pub use super::Arg;
 pub use super::Bufsize;
 pub use super::er301;
 
-// COMMANDS
+
+// addresses
+
+pub const ADDRESSES: [usize; 3] = [0x31, 0x32, 0x33];
+
+// commands
 
 pub enum Cmd {
     Tr, 
@@ -38,10 +43,6 @@ pub const CV: Command = Command {command_number: 0x10, args: &[ Arg{ name: "port
 pub const CV_SLEW: Command = Command {command_number: 0x12, args: &[ Arg{ name: "port", argtype: Bufsize::U8}, Arg{ name: "time", argtype: Bufsize::S16V}], required:1};
 pub const CV_SET: Command = Command {command_number: 0x11, args: &[ Arg{ name: "port", argtype: Bufsize::U8}, Arg{ name: "volt", argtype: Bufsize::S16V}], required:1};
 pub const CV_OFFSET: Command = Command {command_number: 0x15, args: &[ Arg{ name: "port", argtype: Bufsize::U8}, Arg{ name: "offset", argtype: Bufsize::S16V}], required:1};
-
-// ADDRESSES
-
-pub const ADDRESSES: [usize; 3] = [0x31, 0x32, 0x33];
 
 pub fn cmd_from_string(cmd_name: &str) -> Option<Command>{
     match cmd_name {

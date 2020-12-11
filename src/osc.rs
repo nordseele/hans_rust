@@ -1,7 +1,3 @@
-/*
-    OSC Module => Handle, parse and route OSC messages
-*/
-
 use rosc::OscPacket;
 use rosc::OscType;
 use crate::eurorack::*;
@@ -34,7 +30,7 @@ fn route_eurorack_module(msg: &rosc::OscMessage, path: Vec< &str >) {
             OscType::Int(value) => data.push(value as u16),
             _ => ()
         }
-    }
+    } 
     // retrieve the module number  
     let module_number = get_module_number(&path[1]);
     // retrieve the port number  
@@ -47,11 +43,10 @@ fn route_eurorack_module(msg: &rosc::OscMessage, path: Vec< &str >) {
             "txo" | "Txo"     => Some(EuroModules::Txo),
             _                 => None,
         };
-    // extract a command, we'll test it later in the corresponding Module ====== >  ???
-    //let command = &path[2];
     
     // check if we have all the data needed and pass to the II Module
     if let (Some(module_name), Some(module_number), Some(port_number)) = (module_name, module_number, port_number) {
+        // get the command details
         let command = get_module_command(&module_name, &path[2]);
         match ii::send_i2c(module_name, module_number, port_number, command, data) {
             Ok(_) => {},
@@ -78,10 +73,10 @@ fn get_module_number(module: &str) -> Option<usize> {
 fn get_module_command(module_name: &EuroModules, command: &str) -> Option<Command>{
     let mut cmd: Option<Command> = None;
     // route command lookup to the corresponding module
-        match module_name {
-            EuroModules::Er301 => cmd = er301::cmd_from_string(command),
-            _ => cmd = None,
-        }
+    match module_name {
+        EuroModules::Er301 => cmd = er301::cmd_from_string(command),
+        _ => cmd = None,
+    }
     cmd
 }
 

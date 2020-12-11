@@ -1,18 +1,13 @@
-/*
-    II Module => Handle, parse and route commands over i2c (Eurorack modules)
-*/
 use std::num::Wrapping;
 use rppal::i2c::I2c;
 use std::error::Error;
 use crate::eurorack::*;
+use crate::settings;
 use super::*;
 
 pub fn send_i2c(module_name: EuroModules, module_number: usize, port_number: u8, command: Option<Command>, data: Vec<u16>) -> Result<(), Box<dyn Error>> {
-    // open an i2c bus (bus 3 = bitbanged i2c)
-    let mut i2c = I2c::with_bus(3)?;
-    // test the command received
+    let mut i2c = I2c::with_bus(settings::I2CBUS)?;
     let cmd = command;
-    // get the module address and set it
     let module_address: Option<usize> = get_module_address(&module_name, module_number);
     let mut match_args = false;
     let mut args: &[Arg] = &[];
@@ -42,11 +37,11 @@ pub fn send_i2c(module_name: EuroModules, module_number: usize, port_number: u8,
 fn get_module_address(module_name: &EuroModules, module_number: usize) -> Option<usize> {
     let mut addr: Option<usize> = None;
     // get the address if the module number matches
-        match module_name {
-            EuroModules::Er301 => addr = Some(er301::ADDRESSES[((module_number + 3 - 1) % 3)]), // Modulo trick otherwise we count from 0
-            _ => addr = None,
-        }
-        addr
+    match module_name {
+        EuroModules::Er301 => addr = Some(er301::ADDRESSES[((module_number + 3 - 1) % 3)]), // Modulo trick otherwise we count from 0
+        _ => addr = None,
+    }
+    addr
 }
 
 fn offset_port_number(module_name: &EuroModules, port: u8) -> Option<u8> {

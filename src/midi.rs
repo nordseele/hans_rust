@@ -65,7 +65,7 @@ impl NoteOn {
     }
     fn to_i2c(self) {
         match self.number {
-            40..=80 => println!("{:?}, {}", 1, 2),
+            40..=80 => { ii::send_i2c(EuroModules::Er301, 1, self.number, Some(er301::TR_PULSE), vec![]).ok(); },
             _ => println!("no mapping"),
         }
     }
