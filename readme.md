@@ -11,13 +11,13 @@ See nordseele/hans for a full description.
 
 To do: 
 - Txo implementation (commands)
-- Complete Basic MIDI message mapping. [^1]
-- i2c input [^2]
+- Complete Basic MIDI message mapping. [1]
+- i2c input [2]
 
 Done:
 - Midi IO
 - i2c output
 - OSC input
 
-[^1]: The OSC to ii and MIDI to ii system is perfectly fine but needs a generic mapping.
-[^2]: Option A is to do that using RPPAL, Option B is to do a full Pigpio binding and use bsc2xfer.
+[1]: The OSC to ii and MIDI to ii system is perfectly fine but needs a generic mapping.
+[2]: Option A is to do that using RPPAL, Option B is to do a full Pigpio binding and use bsc2xfer.
