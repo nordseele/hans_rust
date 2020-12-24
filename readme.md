@@ -20,4 +20,5 @@ Done:
 - OSC input
 
 [1]: The OSC to ii and MIDI to ii system is perfectly fine but needs a generic mapping.
-[2]: Option A is to do that using RPPAL, Option B is to do a full Pigpio binding and use bsc2xfer.
+
+[2]: Option A -> by extending RPPAL ? | Option B -> full Pigpio binding and use bsc2xfer.
