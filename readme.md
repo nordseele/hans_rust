@@ -10,9 +10,9 @@ See nordseele/hans for a full description.
 *******************************************
 
 To do: 
-1 - Txo implementation (commands)
-2 - Complete Basic MIDI message mapping. (The OSC to i2c and MIDI to i2c system is perfectly fine but needs a generic mapping).
-3 - i2c input (Full Pipgpio binding C tor Rust or via RPPAL ?)
+- Txo implementation (commands)
+- Complete Basic MIDI message mapping. (The OSC to i2c and MIDI to i2c system is perfectly fine but needs a generic mapping).
+- i2c input (Full Pipgpio binding C tor Rust or via RPPAL ?)
 
 Done:
 - Midi IO
