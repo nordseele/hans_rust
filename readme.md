@@ -1,7 +1,7 @@
 ## Hans
 
 Osc to ii, MIDI to ii for ER-301 and Txo.
-See nordseele/hans_legacy for a full description.
+See nordseele/hans for a full description.
 
 
 *******************************************
