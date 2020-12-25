@@ -75,6 +75,7 @@ fn get_module_command(module_name: &EuroModules, command: &str) -> Option<Comman
     // route command lookup to the corresponding module
     match module_name {
         EuroModules::Er301 => cmd = er301::cmd_from_string(command),
+        EuroModules::Txo => cmd = txo::cmd_from_string(command),
         _ => cmd = None,
     }
     cmd
