@@ -30,7 +30,7 @@ fn handle_midi_message(bytes: &[u8]) {
     // route various message types 
     match bytes[0] {
         144..=159 => NoteOn{channel: channel, number: bytes[1], velocity: bytes[2]}.to_i2c(),
-        128..=143 => println!("Type: note off | Channel: {} | Number: {} | Release: {}", channel, bytes[1], bytes[2]),
+        128..=143 => NoteOff{channel: channel, number: bytes[1], velocity: bytes[2]}.to_i2c(),
         160..=175 => println!("Polyphonic aftertouch"),
         176..=191 => ContinuousController{channel: channel, number: bytes[1], value: bytes[2]}.to_i2c(),
         192..=207 => println!("Program Change"),
@@ -66,10 +66,30 @@ impl NoteOn {
         println!("{} {} {}", self.channel, self.number, self.velocity)
     }
     fn to_i2c(self) {
-        match self.number {
-            1..=100 => { ii::send_i2c(EuroModules::Er301, 1, self.number, Some(er301::TR_PULSE), vec![]).ok(); },
-            _ => println!("no mapping"),
+        match self.channel {
+            1 => match self.number {
+                60..=71 => { ii::send_i2c(EuroModules::Er301, 1, self.number, Some(er301::TR_PULSE), vec![]).ok();},
+                72..=83 => { ii::send_i2c(EuroModules::Er301, 1, self.number, Some(er301::TR_TOG), vec![]).ok();},
+                _ => (),
+            },
+            _ => (),
         }
+
+    }
+}
+impl NoteOff {
+    fn display(self) {
+        println!("{} {} {}", self.channel, self.number, self.velocity)
+    }
+    fn to_i2c(self) {
+        match self.channel {
+            1 => match self.number {
+                72..=83 => { ii::send_i2c(EuroModules::Er301, 1, self.number, Some(er301::TR_TOG), vec![]).ok();},
+                _ => (),
+            },
+            _ => (),
+        }
+
     }
 }
 
@@ -79,9 +99,12 @@ impl ContinuousController {
     }
     fn to_i2c(self) {
         let v: u16 = self.value as u16 * 128;
-        match self.number {
-            1..=100 => { ii::send_i2c(EuroModules::Er301, 1, self.number, Some(er301::CV), vec![v]).ok(); },
-            _ => println!("no mapping"),
-        }
+        match self.channel{
+            1 => match self.number {
+                1..=100 => { ii::send_i2c(EuroModules::Er301, 1, self.number, Some(er301::CV), vec![v]).ok();},
+                _ => (),
+            },
+            _ => (),
+        } 
     }
 }
