@@ -1,10 +1,12 @@
-#### Hans - OSC I2C MIDI 
+## Hans - OSC I2C MIDI 
 
 *******************************************
 Rust version of the Node.js project. 
+
 OSC I2C MIDI for Eurorack Orthogonal Devices ER-301 Sound Computer, TXo, etc. 
 
 Status: Work in progress
+
 See nordseele/hans_legacy for a full description.
 *******************************************
 
