@@ -1,24 +1,21 @@
-## Hans - OSC I2C MIDI 
+## Hans
 
-*******************************************
-Rust version of the Node.js project. 
-
-OSC I2C MIDI for Eurorack Orthogonal Devices ER-301 Sound Computer, TXo, etc. 
-
-Status: Work in progress
-
+Osc to ii, MIDI to ii for ER-301 and Txo.
 See nordseele/hans_legacy for a full description.
+
+
 *******************************************
 
 #### Midi mapping:
 
-###### Note On => 
-60-71: TR pulse
+##### Channel 1
 
-72-83: TR toggle
+    Note On
+    60-71: TR pulse
+    72-83: TR toggle
 
-###### Note Off => 
-72-83: TR Toggle
+    Note Off 
+    72-83: TR toggle
 
-###### CC => 
-1-100: CV
+    Controller 
+    1-100: CV
