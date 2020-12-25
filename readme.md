@@ -9,16 +9,16 @@ OSC I2C MIDI for Eurorack Orthogonal Devices ER-301 Sound Computer, TXo, etc.
 See nordseele/hans_legacy for a full description.
 *******************************************
 
-To do: 
-- Txo implementation (commands)
-- Complete Basic MIDI message mapping. [1]
-- i2c input [2]
+Basic commands 
 
-Done:
-- Midi IO
-- i2c output
-- OSC input
+#### Midi mapping:
 
-[1]: The OSC to ii and MIDI to ii system is perfectly fine but needs a generic mapping.
+###### Note On => 
+60-71: TR pulse
+72-83: TR toggle
 
-[2]: Option A -> by extending RPPAL ? | Option B -> full Pigpio binding and use bsc2xfer.
+###### Note Off => 
+72-83: TR Toggle
+
+###### CC => 
+1-100: CV
