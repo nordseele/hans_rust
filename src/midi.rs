@@ -27,12 +27,12 @@ pub fn create_midi_out() -> Result<midir::MidiOutputConnection, Box<dyn Error>> 
 fn handle_midi_message(bytes: &[u8]) {
     // retrieve MIDI channel
     let channel = (bytes[0] % 16) + 1;
-    // route various message types
+    // route various message types 
     match bytes[0] {
         144..=159 => NoteOn{channel: channel, number: bytes[1], velocity: bytes[2]}.to_i2c(),
         128..=143 => println!("Type: note off | Channel: {} | Number: {} | Release: {}", channel, bytes[1], bytes[2]),
         160..=175 => println!("Polyphonic aftertouch"),
-        176..=191 => println!("Type: control | Channel: {} | Number: {} | Value: {}", channel, bytes[1], bytes[2]),
+        176..=191 => ContinuousController{channel: channel, number: bytes[1], value: bytes[2]}.to_i2c(),
         192..=207 => println!("Program Change"),
         250 => println!("Start"),
         251 => println!("Continue"),
@@ -53,11 +53,13 @@ struct NoteOff {
     velocity: u8,
 }
 
-struct CC {
+struct ContinuousController {
     channel: u8, 
     number: u8,
     value: u8,
 }
+
+// MIDI mapping (draft)
 
 impl NoteOn {
     fn display(self) {
@@ -65,7 +67,20 @@ impl NoteOn {
     }
     fn to_i2c(self) {
         match self.number {
-            40..=80 => { ii::send_i2c(EuroModules::Er301, 1, self.number, Some(er301::TR_PULSE), vec![]).ok(); },
+            1..=100 => { ii::send_i2c(EuroModules::Er301, 1, self.number, Some(er301::TR_PULSE), vec![]).ok(); },
+            _ => println!("no mapping"),
+        }
+    }
+}
+
+impl ContinuousController {
+    fn display(self) {
+        println!("{} {} {}", self.channel, self.number, self.value)
+    }
+    fn to_i2c(self) {
+        let v: u16 = self.value as u16 * 128;
+        match self.number {
+            1..=100 => { ii::send_i2c(EuroModules::Er301, 1, self.number, Some(er301::CV), vec![v]).ok(); },
             _ => println!("no mapping"),
         }
     }

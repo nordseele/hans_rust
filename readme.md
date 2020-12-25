@@ -6,7 +6,7 @@ Status: Work in progress - Do not use
 Rust version of the Node.js project. 
 OSC I2C MIDI for Eurorack Orthogonal Devices ER-301 Sound Computer, TXo, etc. 
 
-See nordseele/hans for a full description.
+See nordseele/hans_legacy for a full description.
 *******************************************
 
 To do: 
