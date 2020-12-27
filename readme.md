@@ -15,7 +15,7 @@ See nordseele/hans for a full description.
 
 #### Midi mapping:
 
-##### Channel 1 - [ Mono mode ]
+##### Channel 1 - [ Mono mode ER-301 ]
 
     Note On
     0 - 120: TR 1 1 | PITCH CV 1 | VELOCITY CV 2
