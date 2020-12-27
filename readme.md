@@ -15,14 +15,14 @@ See nordseele/hans for a full description.
 
 #### Midi mapping:
 
-##### Channel 1
+##### Channel 1 - [ Mono mode ]
 
     Note On
-    60-71: TR pulse
-    72-83: TR toggle
+    0 - 120: TR 1 1 | PITCH CV 1 | VELOCITY CV 2
 
     Note Off 
-    72-83: TR toggle
+    0 - 120: TR 1 0 if Note count = 0 
 
     Controller 
-    1-100: CV
+    1: CV SLEW 1
+    3 - 100: CV N

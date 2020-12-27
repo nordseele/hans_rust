@@ -33,7 +33,7 @@ pub struct Module {
    pub cv_offset: Command,
 }
 
-pub const TR: Command = Command {command_number: 0x0, args: &[ Arg{ name: "port", argtype: Bufsize::U8}], required:0};
+pub const TR: Command = Command {command_number: 0x0, args: &[ Arg{ name: "port", argtype: Bufsize::U8}, Arg{ name: "state", argtype: Bufsize::S16}], required:1};
 pub const TR_TOG: Command = Command {command_number: 0x01, args: &[ Arg{ name: "port", argtype: Bufsize::U8}], required:0};
 pub const TR_PULSE: Command = Command {command_number: 0x5, args: &[ Arg{ name: "port", argtype: Bufsize::U8}], required:0};
 pub const TR_TIME: Command = Command {command_number: 0x32, args: &[ Arg{ name: "port", argtype: Bufsize::U8}, Arg{ name: "time", argtype: Bufsize::S16}], required:1};

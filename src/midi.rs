@@ -4,6 +4,7 @@ use midir::os::unix::{VirtualInput, VirtualOutput};
 use crate::patch::*;
 use crate::eurorack::*;
 
+
 pub fn create_midi_in() -> Result<midir::MidiInputConnection<()>, Box<dyn Error>>  {
     let mut midi_in = MidiInput::new("Hans Input")?;
     midi_in.ignore(Ignore::SysexAndTime);
@@ -56,41 +57,66 @@ struct ContinuousController {
     value: u8,
 }
 
-// MIDI mapping
+pub struct NoteCount {
+    pub count: u8,
+}
+    
+static mut NOTE_COUNT: u8 = 0;
+
+// MIDI mapping WIP
 
 impl NoteOn {
     fn display(self) {
         println!("{} {} {}", self.channel, self.number, self.velocity)
     }
     fn to_i2c(self) {
+
+        let velocity: usize = (self.velocity as usize ) * 16384 / 127;
+        let pitch: usize = (self.number as usize ) * 16384 / 120;
+
         match self.channel {
             1 => match self.number {
-                48..=71 => { 
-                    { ii::send_i2c(EuroModules::Er301, 1, 1, Some(er301::TR_TOG), vec![]).ok(); }
-                    { ii::send_i2c(EuroModules::Er301, 1, 1, Some(er301::CV), vec![]).ok(); }
-                    { ii::send_i2c(EuroModules::Er301, 1, 2, Some(er301::CV), vec![]).ok(); }
+                0..=120 => {
+                    unsafe {NOTE_COUNT += 1; println!("{}", NOTE_COUNT)};
+                    ii::send_i2c(EuroModules::Er301, 1, 1, Some(er301::TR), vec![1]).ok();
+                    ii::send_i2c(EuroModules::Er301, 1, 1, Some(er301::CV), vec![pitch as u16]).ok();
+                    ii::send_i2c(EuroModules::Er301, 1, 2, Some(er301::CV), vec![velocity as u16]).ok();
                 },
-                72..=83 => { ii::send_i2c(EuroModules::Er301, 1, self.number, Some(er301::TR_PULSE), vec![]).ok();},
+                _ => (),
+            },
+            2 => match self.number {
+                0..=120 => { ii::send_i2c(EuroModules::Er301, 1, 1, Some(er301::TR_PULSE), vec![]).ok();},
                 _ => (),
             },
             _ => (),
         }
-
     }
 }
+
 impl NoteOff {
     fn display(self) {
         println!("{} {} {}", self.channel, self.number, self.velocity)
     }
     fn to_i2c(self) {
+
+        let velocity: usize = (self.velocity as usize ) * 16384 / 127;
+        let pitch: usize = (self.number as usize ) * 16384 / 120;
+
         match self.channel {
             1 => match self.number {
-                72..=83 => { ii::send_i2c(EuroModules::Er301, 1, self.number, Some(er301::TR_TOG), vec![]).ok();},
+                0..=120 => {
+                    unsafe {
+                    let count = NOTE_COUNT;
+                    if NOTE_COUNT != 0 {NOTE_COUNT -= 1; println!("{}", NOTE_COUNT)} else {()};
+                    if count == 1 {
+                        ii::send_i2c(EuroModules::Er301, 1, 2, Some(er301::CV), vec![0]).ok();
+                        ii::send_i2c(EuroModules::Er301, 1, 1, Some(er301::TR), vec![0]).ok(); () } else {()};
+                    };
+                },
                 _ => (),
             },
             _ => (),
         }
-
     }
 }
 
@@ -99,10 +125,13 @@ impl ContinuousController {
         println!("{} {} {}", self.channel, self.number, self.value)
     }
     fn to_i2c(self) {
-        let v: u16 = self.value as u16 * 128;
-        match self.channel{
+
+        let value: usize = (self.value as usize ) * 16384 / 127;
+
+        match self.channel {
             1 => match self.number {
-                1..=100 => { ii::send_i2c(EuroModules::Er301, 1, self.number, Some(er301::CV), vec![v]).ok();},
+                1 => { ii::send_i2c(EuroModules::Er301, 1, self.number, Some(er301::CV_SLEW), vec![value as u16]).ok();},
+                3..=100 => { ii::send_i2c(EuroModules::Er301, 1, self.number, Some(er301::CV), vec![value as u16]).ok();},
                 _ => (),
             },
             _ => (),

@@ -1,6 +1,7 @@
 // instructions
 #![allow(dead_code)]
 #![allow(unused_imports)]
+#![allow(unused_variables)]
 
 // modules
 use std::error::Error;
@@ -35,9 +36,8 @@ fn main()  {
     // midi : midi.rs 
     let midi_in = midi::create_midi_in().unwrap();
     let midi_out = midi::create_midi_out();
+    let mut note_count = midi::NoteCount{count: 0};
 
-    // i2c : ii.rs 
-    
     // osc : osc.rs 
     let mut buf = [0u8; rosc::decoder::MTU];
     loop {
@@ -54,7 +54,8 @@ fn main()  {
         }
     }
 }
-    
+
+
 fn greetings() {
     println!("Hans | Nordseele 2020");
 }
