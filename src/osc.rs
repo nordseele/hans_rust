@@ -31,9 +31,7 @@ fn route_eurorack_module(msg: &rosc::OscMessage, path: Vec< &str >) {
             _ => ()
         }
     } 
-    // retrieve the module number  
     let module_number = get_module_number(&path[1]);
-    // retrieve the port number  
     let port_number = get_port_number(&path);
 
     // assign an enum variant to the module name, check if the module exists
@@ -50,10 +48,10 @@ fn route_eurorack_module(msg: &rosc::OscMessage, path: Vec< &str >) {
         let command = get_module_command(&module_name, &path[2]);
         match ii::send_i2c(module_name, module_number, port_number, command, data) {
             Ok(_) => {},
-            Err(_) => println!("Are you sure the Eurorack module is connected ?"),
+            Err(_) => println!("Are you sure that the Eurorack module is connected ?"),
         }
     } else {
-        println!("There's something wrong with the way your OSC message is formated, please try again.")
+        println!("There's something wrong with the way your OSC message is formated")
     }
 }
 
@@ -106,9 +104,9 @@ impl OscErrors {
         match self {
             OscErrors::DeviceNotFound      => println!("Device not found"),
             OscErrors::UnrecognizedAddress => println!("Address not found"),
-            OscErrors::NoSetAction => println!("I cannot find a corresponding route"),
+            OscErrors::NoSetAction         => println!("No corresponding route"),
             OscErrors::CommandNotFound     => println!("Command not found"),
-            OscErrors::PortNumberIncorrect => println!("The port number is incorrect"),
+            OscErrors::PortNumberIncorrect => println!("Incorrect port number"),
         }
     }
 }

@@ -9,7 +9,6 @@ pub use super::er301;
 pub const ADDRESSES: [usize; 3] = [0x31, 0x32, 0x33];
 
 // commands
-
 pub enum Cmd {
     Tr, 
     TrTog,

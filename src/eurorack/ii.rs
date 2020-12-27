@@ -22,7 +22,7 @@ pub fn send_i2c(module_name: EuroModules, module_number: usize, port_number: u8,
         }
     }
 
-    // if we have an address and a valid command then carry on and send the buffer
+    // if we have an address and a valid command -> carry on and send the buffer
     if let (Some(module_address), true) = (module_address, match_args) {     
         let buffer = format_the_buffer(data, port);
         let final_buffer: &[u8] = &buffer; 

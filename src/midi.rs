@@ -4,7 +4,6 @@ use midir::os::unix::{VirtualInput, VirtualOutput};
 use crate::patch::*;
 use crate::eurorack::*;
 
-// create Virtual MIDI IO (variables stored and kept alive in main.rs)
 pub fn create_midi_in() -> Result<midir::MidiInputConnection<()>, Box<dyn Error>>  {
     let mut midi_in = MidiInput::new("Hans Input")?;
     midi_in.ignore(Ignore::SysexAndTime);
@@ -25,9 +24,7 @@ pub fn create_midi_out() -> Result<midir::MidiOutputConnection, Box<dyn Error>> 
 }
 
 fn handle_midi_message(bytes: &[u8]) {
-    // retrieve MIDI channel
     let channel = (bytes[0] % 16) + 1;
-    // route various message types 
     match bytes[0] {
         144..=159 => NoteOn{channel: channel, number: bytes[1], velocity: bytes[2]}.to_i2c(),
         128..=143 => NoteOff{channel: channel, number: bytes[1], velocity: bytes[2]}.to_i2c(),
@@ -59,7 +56,7 @@ struct ContinuousController {
     value: u8,
 }
 
-// MIDI mapping (draft)
+// MIDI mapping
 
 impl NoteOn {
     fn display(self) {
@@ -68,8 +65,12 @@ impl NoteOn {
     fn to_i2c(self) {
         match self.channel {
             1 => match self.number {
-                60..=71 => { ii::send_i2c(EuroModules::Er301, 1, self.number, Some(er301::TR_PULSE), vec![]).ok();},
-                72..=83 => { ii::send_i2c(EuroModules::Er301, 1, self.number, Some(er301::TR_TOG), vec![]).ok();},
+                48..=71 => { 
+                    { ii::send_i2c(EuroModules::Er301, 1, 1, Some(er301::TR_TOG), vec![]).ok(); }
+                    { ii::send_i2c(EuroModules::Er301, 1, 1, Some(er301::CV), vec![]).ok(); }
+                    { ii::send_i2c(EuroModules::Er301, 1, 2, Some(er301::CV), vec![]).ok(); }
+                },
+                72..=83 => { ii::send_i2c(EuroModules::Er301, 1, self.number, Some(er301::TR_PULSE), vec![]).ok();},
                 _ => (),
             },
             _ => (),
