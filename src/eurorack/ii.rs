@@ -39,6 +39,7 @@ fn get_module_address(module_name: &EuroModules, module_number: usize) -> Option
     // get the address if the module number matches
     match module_name {
         EuroModules::Er301 => addr = Some(er301::ADDRESSES[((module_number + 3 - 1) % 3)]), // Modulo trick otherwise we count from 0
+        EuroModules::Txo => addr = Some(txo::ADDRESSES[((module_number + 8 - 1) % 3)]), // Modulo trick otherwise we count from 0
         _ => addr = None,
     }
     addr
@@ -48,6 +49,7 @@ fn offset_port_number(module_name: &EuroModules, port: u8) -> Option<u8> {
     let mut port_number: Option<u8> = None;
     match module_name {
         EuroModules::Er301 => port_number = Some((port + 101 - 1) % 101), // Modulo trick otherwise we count from 0
+        EuroModules::Txo => port_number = Some((port + 9 - 1) % 9), // Modulo trick otherwise we count from 0
         _ => port_number = None,
     }
     port_number
