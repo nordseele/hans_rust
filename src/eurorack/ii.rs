@@ -39,7 +39,7 @@ fn get_module_address(module_name: &EuroModules, module_number: usize) -> Option
     // get the address if the module number matches
     match module_name {
         EuroModules::Er301 => addr = Some(er301::ADDRESSES[((module_number + 3 - 1) % 3)]), // Modulo trick otherwise we count from 0
-        EuroModules::Txo => addr = Some(txo::ADDRESSES[((module_number + 8 - 1) % 3)]), // Modulo trick otherwise we count from 0
+        EuroModules::Txo => addr = Some(txo::ADDRESSES[((module_number + 8 - 1) % 8)]), // Modulo trick otherwise we count from 0
         _ => addr = None,
     }
     addr
