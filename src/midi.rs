@@ -4,6 +4,13 @@ use midir::os::unix::{VirtualInput, VirtualOutput};
 use crate::patch::*;
 use crate::eurorack::*;
 
+#[macro_export]
+
+macro_rules! ii {
+    ($module:ident, $unit:expr, $port:expr, $cmd:ident, $arg:ident) => {
+        {ii::send_i2c(EuroModules::$module, $unit, $port, Some(er301::$cmd), vec![$arg as u16]).ok();}
+    };
+}
 
 pub fn create_midi_in() -> Result<midir::MidiInputConnection<()>, Box<dyn Error>>  {
     let mut midi_in = MidiInput::new("Hans Input")?;
@@ -81,6 +88,7 @@ impl NoteOn {
                     ii::send_i2c(EuroModules::Er301, 1, 1, Some(er301::TR), vec![1]).ok();
                     ii::send_i2c(EuroModules::Er301, 1, 1, Some(er301::CV), vec![pitch as u16]).ok();
                     ii::send_i2c(EuroModules::Er301, 1, 2, Some(er301::CV), vec![velocity as u16]).ok();
+                    ii!(Er301, 1, 3, CV, pitch);
                 },
                 _ => (),
             },
