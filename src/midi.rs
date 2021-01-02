@@ -86,9 +86,9 @@ impl NoteOn {
                 0..=120 => {
                     unsafe {NOTE_COUNT += 1; println!("{}", NOTE_COUNT)};
                     ii::send_i2c(EuroModules::Er301, 1, 1, Some(er301::TR), vec![1]).ok();
-                    ii::send_i2c(EuroModules::Er301, 1, 1, Some(er301::CV), vec![pitch as u16]).ok();
-                    ii::send_i2c(EuroModules::Er301, 1, 2, Some(er301::CV), vec![velocity as u16]).ok();
-                    ii!(Er301, 1, 3, CV, pitch);
+                    //ii::send_i2c(EuroModules::Er301, 1, 1, Some(er301::CV), vec![pitch as u16]).ok();
+                    ii!(Er301, 1, 1, CV, pitch);
+                    //ii::send_i2c(EuroModules::Er301, 1, 2, Some(er301::CV), vec![velocity as u16]).ok();
                 },
                 _ => (),
             },
