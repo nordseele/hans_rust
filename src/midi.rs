@@ -4,8 +4,12 @@ use midir::os::unix::{VirtualInput, VirtualOutput};
 use crate::patch::*;
 use crate::eurorack::*;
 
-#[macro_export]
 
+// This macro simplifies the calls to `send_i2c` function
+// Full call => ii::send_i2c(EuroModules::Er301, 1, 2, Some(er301::CV), vec![velocity as u16]).ok();
+// Todo => handle the empty vec by adding another matching arm, handle int instead of ident in last arg.
+
+#[macro_export]
 macro_rules! ii {
     ($module:ident, $unit:expr, $port:expr, $cmd:ident, $arg:ident) => {
         {ii::send_i2c(EuroModules::$module, $unit, $port, Some(er301::$cmd), vec![$arg as u16]).ok();}
@@ -77,7 +81,7 @@ impl NoteOn {
         println!("{} {} {}", self.channel, self.number, self.velocity)
     }
     fn to_i2c(self) {
-
+        
         let velocity: usize = (self.velocity as usize ) * 16384 / 127;
         let pitch: usize = (self.number as usize ) * 16384 / 120;
 
@@ -88,8 +92,7 @@ impl NoteOn {
                     let direct_value = 1;
                     ii!(Er301, 1, 1, TR, direct_value);
                     ii!(Er301, 1, 1, CV, pitch);
-                    ii!(Er301, 1, 2, CV, velocity);
-                    //ii::send_i2c(EuroModules::Er301, 1, 2, Some(er301::CV), vec![velocity as u16]).ok();
+                    ii!(Er301, 1, 2, CV, velocity);  
                 },
                 _ => (),
             },
