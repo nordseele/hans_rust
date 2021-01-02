@@ -85,7 +85,7 @@ impl NoteOn {
             1 => match self.number {
                 0..=120 => {
                     unsafe {NOTE_COUNT += 1; println!("{}", NOTE_COUNT)};
-                    let direct_value = 1,
+                    let direct_value = 1;
                     ii!(Er301, 1, 1, TR, direct_value);
                     ii!(Er301, 1, 1, CV, pitch);
                     ii!(Er301, 1, 2, CV, velocity);
