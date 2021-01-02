@@ -85,15 +85,20 @@ impl NoteOn {
             1 => match self.number {
                 0..=120 => {
                     unsafe {NOTE_COUNT += 1; println!("{}", NOTE_COUNT)};
-                    ii::send_i2c(EuroModules::Er301, 1, 1, Some(er301::TR), vec![1]).ok();
+                    //ii::send_i2c(EuroModules::Er301, 1, 1, Some(er301::TR), vec![1]).ok();
                     //ii::send_i2c(EuroModules::Er301, 1, 1, Some(er301::CV), vec![pitch as u16]).ok();
+
+                    ii!(Er301, 1, 1, TR, 1);
                     ii!(Er301, 1, 1, CV, pitch);
+                    ii!(Er301, 1, 2, CV, velocity);
                     //ii::send_i2c(EuroModules::Er301, 1, 2, Some(er301::CV), vec![velocity as u16]).ok();
                 },
                 _ => (),
             },
             2 => match self.number {
-                0..=120 => { ii::send_i2c(EuroModules::Er301, 1, 1, Some(er301::TR_PULSE), vec![]).ok();},
+                0..=120 => { 
+                    ii::send_i2c(EuroModules::Er301, 1, 1, Some(er301::TR_PULSE), vec![]).ok();
+                },
                 _ => (),
             },
             _ => (),
