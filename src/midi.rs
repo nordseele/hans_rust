@@ -102,7 +102,7 @@ impl NoteOn {
             },
             2 => match self.number {
                 0..=120 => { 
-                    ii::send_i2c(EuroModules::Er301, 1, 1, Some(er301::TR_PULSE), vec![]).ok();
+                    ii!(Er301, 1, self.number, TR_PULSE, value);
                 },
                 _ => (),
             },
