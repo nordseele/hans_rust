@@ -102,7 +102,7 @@ impl NoteOn {
             },
             2 => match self.number {
                 0..=120 => { 
-                    ii!(Er301, 1, self.number, TR_PULSE, value);
+                    ii!(Er301, 1, self.number, TR_PULSE);
                 },
                 _ => (),
             },

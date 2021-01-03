@@ -29,8 +29,27 @@ If the number of arguments sent does not match what the "command" expects, nothi
 
 ### MIDI
 
+##### MIDI Thru
+
 By default each message received is forwarded to the MIDI output.
-You can edit the MIDI to ii mapping in midi.rs (from line 82)
 
+##### Pairing a Bluetooth MIDI device with the Raspberry Pi
 
-  
+    sudo bluetoothctl
+        scan on 
+        devices (copy device address)
+
+        connect 48:B6:20:03:18:5B (a Roli block)
+
+    aconnect -i (check if the Roli Block is listed here, amidiauto should connect it to Hans automatically)
+
+##### Editing the basic MIDI mapping 
+You can edit the MIDI to ii mapping in midi.rs (from line 82) It is recommended to know the Rust syntax, be careful not to break anything. You'll have to recompile the binary. You can do that by running `cargo build --release` from the hans folder when you're done editing the code.
+
+Use the following macros in the different pattern matching blocks. ie:
+
+    ii!(Er301, 1, 1, CV, pitch);
+    ii!(Er301, 1, 2, CV, velocity);  
+    ii!(Er301, 1, number, TR_PULSE);
+    ii!(Er301, 1, 1, TR, 1);
+    ii!(Txo, 1, 2, CV, velocity);  

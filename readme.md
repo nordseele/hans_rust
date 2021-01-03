@@ -4,11 +4,9 @@ Osc to ii, MIDI to ii for ER-301 and Txo.
 See nordseele/hans for a full description.
 
 
-*Feel free to suggest a full generic MIDI mapping (MIDI to ii for the Er-301) by posting an issue in this repository or DM me on Lines.*
-
 #### Status:
-- [x] MIDI to ii (ER-301 + basic set for TXo)
-- [x] OSC to ii (ER-301 + basic set for TXo)
+- [x] MIDI to ii
+- [x] OSC to ii
 - [ ] Full generic MIDI mapping 
 
 *******************************************
