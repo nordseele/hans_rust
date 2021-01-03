@@ -36,7 +36,6 @@ fn main()  {
     // midi : midi.rs 
     let midi_in = midi::create_midi_in().unwrap();
     let midi_out = midi::create_midi_out();
-    let mut note_count = midi::NoteCount{count: 0};
 
     // osc : osc.rs 
     let mut buf = [0u8; rosc::decoder::MTU];

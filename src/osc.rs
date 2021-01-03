@@ -48,10 +48,10 @@ fn route_eurorack_module(msg: &rosc::OscMessage, path: Vec< &str >) {
         let command = get_module_command(&module_name, &path[2]);
         match ii::send_i2c(module_name, module_number, port_number, command, data) {
             Ok(_) => {},
-            Err(_) => println!("Are you sure that the Eurorack module is connected ?"),
+            Err(_) => println!("Unreachable module"),
         }
     } else {
-        println!("There's something wrong with the way your OSC message is formated")
+        println!("Osc format error")
     }
 }
 
@@ -69,12 +69,11 @@ fn get_module_number(module: &str) -> Option<usize> {
 }
 
 fn get_module_command(module_name: &EuroModules, command: &str) -> Option<Command>{
-    let mut cmd: Option<Command> = None;
+    let cmd;
     // route command lookup to the corresponding module
     match module_name {
         EuroModules::Er301 => cmd = er301::cmd_from_string(command),
         EuroModules::Txo => cmd = txo::cmd_from_string(command),
-        _ => cmd = None,
     }
     cmd
 }

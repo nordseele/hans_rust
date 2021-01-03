@@ -4,7 +4,6 @@ use midir::os::unix::{VirtualInput, VirtualOutput};
 use crate::patch::*;
 use crate::eurorack::*;
 
-
 // This macro simplifies the calls to `send_i2c` function
 // Full call => ii::send_i2c(EuroModules::Er301, 1, 2, Some(er301::CV), vec![velocity as u16]).ok();
 // Todo => handle the empty vec by adding another matching arm, handle int instead of ident in last arg.
@@ -13,6 +12,12 @@ use crate::eurorack::*;
 macro_rules! ii {
     ($module:ident, $unit:expr, $port:expr, $cmd:ident, $arg:ident) => {
         {ii::send_i2c(EuroModules::$module, $unit, $port, Some(er301::$cmd), vec![$arg as u16]).ok();}
+    };
+    ($module:ident, $unit:expr, $port:expr, $cmd:ident, $arg:expr) => {
+        {ii::send_i2c(EuroModules::$module, $unit, $port, Some(er301::$cmd), vec![$arg as u16]).ok();}
+    };
+    ($module:ident, $unit:expr, $port:expr, $cmd:ident) => {
+        {ii::send_i2c(EuroModules::$module, $unit, $port, Some(er301::$cmd), vec![]).ok();}
     };
 }
 
@@ -89,8 +94,7 @@ impl NoteOn {
             1 => match self.number {
                 0..=120 => {
                     unsafe {NOTE_COUNT += 1; println!("{}", NOTE_COUNT)};
-                    let direct_value = 1;
-                    ii!(Er301, 1, 1, TR, direct_value);
+                    ii!(Er301, 1, 1, TR, 1);
                     ii!(Er301, 1, 1, CV, pitch);
                     ii!(Er301, 1, 2, CV, velocity);  
                 },
@@ -123,8 +127,8 @@ impl NoteOff {
                     let count = NOTE_COUNT;
                     if NOTE_COUNT != 0 {NOTE_COUNT -= 1; println!("{}", NOTE_COUNT)} else {()};
                     if count == 1 {
-                        ii::send_i2c(EuroModules::Er301, 1, 2, Some(er301::CV), vec![0]).ok();
-                        ii::send_i2c(EuroModules::Er301, 1, 1, Some(er301::TR), vec![0]).ok(); () } else {()};
+                        ii!(Er301, 1, 2, CV, 0);
+                        ii!(Er301, 1, 1, TR, 0); () } else {()};
                     };
                 },
                 _ => (),
@@ -144,8 +148,8 @@ impl ContinuousController {
 
         match self.channel {
             1 => match self.number {
-                1 => { ii::send_i2c(EuroModules::Er301, 1, self.number, Some(er301::CV_SLEW), vec![value as u16]).ok();},
-                3..=100 => { ii::send_i2c(EuroModules::Er301, 1, self.number, Some(er301::CV), vec![value as u16]).ok();},
+                1 => { ii!(Er301, 1, self.number, CV_SLEW, value); },
+                3..=100 => { ii!(Er301, 1, self.number, CV, value); },
                 _ => (),
             },
             _ => (),

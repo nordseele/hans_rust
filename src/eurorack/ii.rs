@@ -5,6 +5,8 @@ use crate::eurorack::*;
 use crate::settings;
 use super::*;
 
+#[allow(unused_assignments)]
+
 pub fn send_i2c(module_name: EuroModules, module_number: usize, port_number: u8, command: Option<Command>, data: Vec<u16>) -> Result<(), Box<dyn Error>> {
     let mut i2c = I2c::with_bus(settings::I2CBUS)?;
     let cmd = command;
@@ -13,7 +15,6 @@ pub fn send_i2c(module_name: EuroModules, module_number: usize, port_number: u8,
     let mut args: &[Arg] = &[];
     let mut cmd_addr: u8 = 0;
     let port = offset_port_number(&module_name, port_number).unwrap();
-
     if let Some(cmd) = cmd {
         if data.len() == cmd.required {
             match_args = true;
@@ -35,22 +36,20 @@ pub fn send_i2c(module_name: EuroModules, module_number: usize, port_number: u8,
 }
 
 fn get_module_address(module_name: &EuroModules, module_number: usize) -> Option<usize> {
-    let mut addr: Option<usize> = None;
+    let addr;
     // get the address if the module number matches
     match module_name {
-        EuroModules::Er301 => addr = Some(er301::ADDRESSES[((module_number + 3 - 1) % 3)]), // Modulo trick otherwise we count from 0
-        EuroModules::Txo => addr = Some(txo::ADDRESSES[((module_number + 8 - 1) % 8)]), // Modulo trick otherwise we count from 0
-        _ => addr = None,
+        EuroModules::Er301 => addr = Some(er301::ADDRESSES[((module_number + 3 - 1) % 3)]), // Modulo trick
+        EuroModules::Txo => addr = Some(txo::ADDRESSES[((module_number + 8 - 1) % 8)]), 
     }
     addr
 }
 
 fn offset_port_number(module_name: &EuroModules, port: u8) -> Option<u8> {
-    let mut port_number: Option<u8> = None;
+    let port_number;
     match module_name {
-        EuroModules::Er301 => port_number = Some((port + 101 - 1) % 101), // Modulo trick otherwise we count from 0
-        EuroModules::Txo => port_number = Some((port + 9 - 1) % 9), // Modulo trick otherwise we count from 0
-        _ => port_number = None,
+        EuroModules::Er301 => port_number = Some((port + 101 - 1) % 101), // Modulo trick 
+        EuroModules::Txo => port_number = Some((port + 9 - 1) % 9), 
     }
     port_number
 }
