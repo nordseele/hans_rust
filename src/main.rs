@@ -37,9 +37,7 @@ fn main()  {
     // midi : midi.rs 
     let midi_in = midi::create_midi_in().unwrap();
     let mut midi_out = midi::create_midi_out().unwrap();
-    //let connect_out = midi::connect_midi_out(midi_out);
 
-/*
     // osc : osc.rs 
     let mut buf = [0u8; rosc::decoder::MTU];
     loop {
@@ -55,7 +53,9 @@ fn main()  {
             }
         }
     }
-*/
+
+
+/* MIDI LATENCY TEST
     loop {
         let delay = time::Duration::from_millis(75);
          midi_out.send(&[144, 60, 1]).unwrap();
@@ -63,7 +63,7 @@ fn main()  {
         thread::sleep(delay);
     }
 }
-
+*/
 
 fn greetings() {
     println!("Hans | Nordseele 2020");

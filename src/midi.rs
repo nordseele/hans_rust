@@ -39,12 +39,7 @@ pub fn create_midi_out() -> Result<midir::MidiOutputConnection, Box<dyn Error>> 
         midi_out.create_virtual("Hans midi output")?
     )
 }
-/*
-pub fn connect_midi_out(midi_out: midir::MidiOutputConnection) {
-    let new_port = midi_out.ports().into_iter().rev().next().unwrap();
-    midi_out.connect(&new_port, "midir-test").unwrap();
-}
-*/
+
 fn handle_midi_message(bytes: &[u8]) {
     let channel = (bytes[0] % 16) + 1;
     match bytes[0] {
