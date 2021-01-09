@@ -9,6 +9,7 @@ use rosc::OscPacket;
 use rosc::OscType;
 use std::net::{UdpSocket, SocketAddrV4, Ipv4Addr};
 use std::fmt;
+use std::{thread, time};
 mod midi;
 mod osc; 
 mod eurorack;
@@ -35,7 +36,9 @@ fn main()  {
 
     // midi : midi.rs 
     let midi_in = midi::create_midi_in().unwrap();
-    let midi_out = midi::create_midi_out();
+    let mut midi_out = midi::create_midi_out().unwrap();
+    //let connect_out = midi::connect_midi_out(midi_out);
+
 
     // osc : osc.rs 
     let mut buf = [0u8; rosc::decoder::MTU];
@@ -51,6 +54,12 @@ fn main()  {
                 break;
             }
         }
+    }
+        
+    loop {
+        let delay = time::Duration::from_millis(175);
+        midi_out.send(&[144, 60, 1]).unwrap();
+        thread::sleep(delay);
     }
 }
 
