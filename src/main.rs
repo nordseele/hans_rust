@@ -62,8 +62,9 @@ fn main()  {
         println!("midi");
         thread::sleep(delay);
     }
-}
 */
+
+}
 
 fn greetings() {
     println!("Hans | Nordseele 2020");
