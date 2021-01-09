@@ -58,7 +58,7 @@ fn main()  {
         
     loop {
         let delay = time::Duration::from_millis(175);
-        midi_out.send(&[144, 60, 1]).unwrap();
+        // midi_out.send(&[144, 60, 1]).unwrap();
         println!("midi");
         thread::sleep(delay);
     }
