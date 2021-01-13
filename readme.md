@@ -1,13 +1,14 @@
 ## Hans
 
-Osc to ii, MIDI to ii for ER-301 and Txo.
+Osc to i2c, MIDI to i2c for Orthogonal Devices Eurorack module ER-301 and BPCMusic Txo.
+
 See nordseele/hans for a full description.
 
 
 #### Status:
-- [x] MIDI to ii
+- [x] Serial MIDI to ii
+- [x] Bluetooth MIDI to ii
 - [x] OSC to ii
-- [ ] Full generic MIDI mapping 
 
 *******************************************
 
